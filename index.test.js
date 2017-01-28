@@ -1,6 +1,6 @@
 //@flow
 
-import j from '.'
+import jj from '.'
 
 test('json utitity', () => {
   let jsonObj = {
@@ -17,21 +17,21 @@ test('json utitity', () => {
     }
   }
 
-  const stringValue = j(jsonObj, 'stringValue').string()
+  const stringValue = jj(jsonObj, 'stringValue').string()
 
   expect(stringValue).toEqual('yury');
 
-  const boolValue = j(jsonObj, 'boolValue').bool()
+  const boolValue = jj(jsonObj, 'boolValue').bool()
   expect(boolValue).toEqual(true);
-  expect( j(jsonObj, 'boolValue').boolOrNull() ).toBe(true);
+  expect(jj(jsonObj, 'boolValue').boolOrNull() ).toBe(true);
 
-  const boolFalseValue = j(jsonObj, 'boolFalseValue').bool()
+  const boolFalseValue = jj(jsonObj, 'boolFalseValue').bool()
   expect(boolFalseValue).toEqual(false);
 
-  const nestedIntValue = j(jsonObj, 'nested.integer').integer()
+  const nestedIntValue = jj(jsonObj, 'nested.integer').integer()
   expect(nestedIntValue).toEqual(1);
 
-  const nested = j(jsonObj, 'nested').obj()
+  const nested = jj(jsonObj, 'nested').obj()
   expect(nestedIntValue).toEqual(1);
 
   const nestedInteger = nested.get('integer').integer()

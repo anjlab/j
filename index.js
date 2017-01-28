@@ -29,7 +29,7 @@ export class JObj extends JRaw {
   _path: string[]
 
   get(path: string | string[] | null): JValue {
-    return j(this._v, path, this._path)
+    return jj(this._v, path, this._path)
   }
 }
 
@@ -184,7 +184,7 @@ export class JValue extends JRaw {
   }
 }
 
-export default function j(jsonLike: any, path: string | string[] | null = null, parentPath:string[] = ['<root>']): JValue {
+export default function jj(jsonLike: any, path: string | string[] | null = null, parentPath:string[] = ['<root>']): JValue {
   if (path == null) {
     return new JValue(jsonLike, parentPath)
   }
