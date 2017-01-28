@@ -1,6 +1,6 @@
 {
   "name": "jj-flow",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "FlowTyped helpers for working with json",
   "main": "lib/index.js",
   "scripts": {
