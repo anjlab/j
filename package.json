@@ -2,10 +2,13 @@
   "name": "jj-flow",
   "version": "1.0.0",
   "description": "FlowTyped helpers for working with json",
-  "main": "index.js",
+  "main": "lib/index.js",
   "scripts": {
     "test": "jest",
-    "flow": "flow; test $? -eq 0 -o $? -eq 2"
+    "flow": "flow; test $? -eq 0 -o $? -eq 2",
+    "build:lib": "babel --out-dir lib src",
+    "prebuild:lib": "rm -rf lib",
+    "postbuild:lib": "flow gen-flow-files src/index.js > lib/index.js.flow"
   },
   "repository": {},
   "author": "Yury Korolev",
@@ -14,6 +17,7 @@
     "lodash": "^4.17.4"
   },
   "devDependencies": {
+    "babel-cli": "^6.22.2",
     "babel-jest": "^18.0.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-plugin-transform-runtime": "^6.15.0",

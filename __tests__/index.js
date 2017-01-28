@@ -1,6 +1,6 @@
 //@flow
 
-import jj from '.'
+import jj from '../src'
 
 test('json utitity', () => {
   let jsonObj = {
