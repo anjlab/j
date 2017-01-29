@@ -27,14 +27,5 @@
     "flow-bin": "^0.36.0",
     "flow-typed": "^2.0.0",
     "jest": "^18.1.0"
-  },
-  "babel": {
-    "presets": [
-      "latest"
-    ],
-    "plugins": [
-      "transform-runtime",
-      "transform-flow-strip-types"
-    ]
   }
 }
