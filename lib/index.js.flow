@@ -1,96 +1,198 @@
 // @flow
 
-import _ from "lodash";
-declare class Class0 {
-  static $call(): string;
-  static UTC(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): number;
-  static now(): number;
-  static parse(s: string): number;
+import _ from 'lodash'
 
-  $key: $SymbolToPrimitive;
-  $value: (hint: "string" | "default" | "number") => string | number;
-  constructor(value?: number | string, month?: number, day?: number, hour?: number, minute?: number, second?: number, millisecond?: number): void;
-  getDate(): number;
-  getDay(): number;
-  getFullYear(): number;
-  getHours(): number;
-  getMilliseconds(): number;
-  getMinutes(): number;
-  getMonth(): number;
-  getSeconds(): number;
-  getTime(): number;
-  getTimezoneOffset(): number;
-  getUTCDate(): number;
-  getUTCDay(): number;
-  getUTCFullYear(): number;
-  getUTCHours(): number;
-  getUTCMilliseconds(): number;
-  getUTCMinutes(): number;
-  getUTCMonth(): number;
-  getUTCSeconds(): number;
-  setDate(date: number): number;
-  setFullYear(year: number, month?: number, date?: number): number;
-  setHours(hours: number, min?: number, sec?: number, ms?: number): number;
-  setMilliseconds(ms: number): number;
-  setMinutes(min: number, sec?: number, ms?: number): number;
-  setMonth(month: number, date?: number): number;
-  setSeconds(sec: number, ms?: number): number;
-  setTime(time: number): number;
-  setUTCDate(date: number): number;
-  setUTCFullYear(year: number, month?: number, date?: number): number;
-  setUTCHours(hours: number, min?: number, sec?: number, ms?: number): number;
-  setUTCMilliseconds(ms: number): number;
-  setUTCMinutes(min: number, sec?: number, ms?: number): number;
-  setUTCMonth(month: number, date?: number): number;
-  setUTCSeconds(sec: number, ms?: number): number;
-  toDateString(): string;
-  toISOString(): string;
-  toJSON(key?: any): string;
-  toLocaleDateString(): string;
-  toLocaleString(): string;
-  toLocaleTimeString(): string;
-  toTimeString(): string;
-  toUTCString(): string;
-  valueOf(): number;
+function _errorMessage(value: any, path:string[], type: string):string {
+  return `Cant't cast '${value}' at ${_.toString(path.join('.'))} to ${type}`
 }
-declare export class JObj extends JRaw {
 
-  _path: Array<string>;
-  _v: {};
-  get(path: string | Array<string> | null): JValue;
-}
-declare export class JRaw {
-
-  _path: Array<string>;
+export class JRaw {
   _v: any;
-  constructor(v: any, path: Array<string>): void;
-  isEmpty(): boolean;
-  raw(): {};
-}
-declare export class JValue extends JRaw {
+  _path: string[]
 
-  _path: Array<string>;
-  _v: any;
-  array(): Array<any>;
-  arrayOrNull(): ?Array<any>;
-  bool(): boolean;
-  boolOrNull(): ?boolean;
-  date(): Class0;
-  dateOrNull(): ?Class0;
-  integer(): number;
-  integerOrNull(): ?number;
-  number(): number;
-  numberOrNull(): ?number;
-  obj(): JObj;
-  objOrNull(): ?JObj;
-  object(): {};
-  objectOrNull(): ?{};
-  string(): string;
-  stringOrNull(): ?string;
-  toBool(): boolean;
-  toInteger(): number;
-  toNumber(): number;
-  toString(): string;
+  constructor(v: any, path:string[]) {
+    this._v = v;
+    this._path = path;
+  }
+
+  isEmpty(): boolean {
+    return _.isEmpty(this._v);
+  }
+
+  raw(): {} {
+    return this._v;
+  }
 }
-declare export default function(jsonLike: any, path?: string | Array<string> | null, parentPath?: Array<string>): JValue;
+
+export class JObj extends JRaw {
+  _v: {}
+  _path: string[]
+
+  get(path: string | string[] | null): JValue {
+    return jj(this._v, path, this._path)
+  }
+}
+
+
+export class JValue extends JRaw {
+  _v: any;
+  _path: string[]
+
+  string(): string {
+    if (_.isString(this._v)) {
+      return this._v;
+    }
+    throw new Error(_errorMessage(this._v, this._path, 'string'))
+  }
+
+  stringOrNull(): ?string {
+    if (_.isString(this._v)) {
+      return this._v;
+    }
+    return null;
+  }
+
+  toString(): string {
+    return _.toString(this._v)
+  }
+
+  date(): Date {
+    const v = this.dateOrNull()
+
+    if (v == null) {
+      throw new Error(_errorMessage(this._v, this._path, 'Date'))
+    }
+    return v;
+  }
+
+  dateOrNull(): ?Date {
+    const dateString = this.stringOrNull();
+    const v = Date.parse(dateString || '');
+    if (isNaN(v)) {
+      return null;
+    }
+
+    return new Date(v);
+  }
+
+  integer(): number {
+    if (_.isInteger(this._v)) {
+      return _.toInteger(this._v);
+    }
+
+    throw new Error(_errorMessage(this._v, this._path, 'interger'))
+  }
+
+  integerOrNull(): ?number {
+    if (_.isInteger(this._v)) {
+      return _.toInteger(this._v);
+    }
+
+    return null;
+  }
+
+  toInteger(): number {
+    return _.toInteger(this._v);
+  }
+
+  number(): number {
+    if (_.isNumber(this._v)) {
+      return this._v;
+    }
+
+    throw new Error(_errorMessage(this._v, this._path, 'number'))
+  }
+
+  numberOrNull(): ?number {
+    if (_.isNumber(this._v)) {
+      return this._v;
+    }
+
+    return null;
+  }
+
+  toNumber(): number {
+    return _.toNumber(this._v);
+  }
+
+  bool(): boolean {
+    if (_.isBoolean(this._v)) {
+      return this._v;
+    }
+
+    throw new Error(_errorMessage(this._v, this._path, 'boolean'))
+  }
+
+  boolOrNull(): ?boolean {
+    if (_.isBoolean(this._v)) {
+      return this._v;
+    }
+
+    return null;
+  }
+
+  toBool(): boolean {
+    if (this._v === false || this._v === 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  obj(): JObj {
+    return new JObj(this.object(), this._path);
+  }
+
+  objOrNull(): ?JObj {
+    let v = this.objectOrNull();
+
+    if (v != null) {
+      return new JObj(v, this._path);
+    }
+
+    return null;
+  }
+
+  object(): {} {
+    if (_.isObject(this._v)){
+      return this._v;
+    }
+    throw new Error(_errorMessage(this._v, this._path, 'Object'))
+  }
+
+  objectOrNull(): ?{} {
+    if (_.isObject(this._v)){
+      return this._v;
+    }
+    return null;
+  }
+
+  array(): [] {
+    if (_.isArray(this._v)) {
+      return this._v;
+    }
+
+    throw new Error(_errorMessage(this._v, this._path, 'Array'))
+  }
+
+  arrayOrNull(): ?[] {
+    if (_.isArray(this._v)) {
+      return this._v;
+    }
+
+    return null;
+  }
+}
+
+export default function jj(jsonLike: any, path: string | string[] | null = null, parentPath:string[] = ['<root>']): JValue {
+  if (path == null) {
+    return new JValue(jsonLike, parentPath)
+  }
+  if (typeof path == 'string') {
+    path = _.toPath(path);
+  }
+  const v = _.get(jsonLike, path)
+
+  return new JValue(v, parentPath.concat(path));
+}
 

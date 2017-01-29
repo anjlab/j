@@ -8,7 +8,7 @@
     "flow": "flow; test $? -eq 0 -o $? -eq 2",
     "build:lib": "babel --out-dir lib src",
     "prebuild:lib": "rm -rf lib",
-    "postbuild:lib": "flow gen-flow-files src/index.js > lib/index.js.flow"
+    "postbuild:lib": "cp src/index.js lib/index.js.flow"
   },
   "repository": {},
   "author": "Yury Korolev",
