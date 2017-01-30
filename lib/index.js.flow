@@ -1,9 +1,20 @@
 // @flow
 
-import _ from 'lodash'
+const isString = require('lodash/isString');
+const toString = require('lodash/toString');
+const isInteger = require('lodash/isInteger');
+const toInteger = require('lodash/toInteger');
+const isEmpty = require('lodash/isEmpty');
+const isNumber = require('lodash/isNumber');
+const toNumber = require('lodash/toNumber');
+const isBoolean = require('lodash/isBoolean');
+const isArray = require('lodash/isArray');
+const isObject = require('lodash/isObject');
+const get = require('lodash/get');
+const toPath = require('lodash/toPath');
 
 function _errorMessage(value: any, path:string[], type: string):string {
-  return `Cant't cast '${value}' at ${_.toString(path.join('.'))} to ${type}`
+  return `Cant't cast '${value}' at ${toString(path.join('.'))} to ${type}`
 }
 
 export class JRaw {
@@ -16,7 +27,7 @@ export class JRaw {
   }
 
   isEmpty(): boolean {
-    return _.isEmpty(this._v);
+    return isEmpty(this._v);
   }
 
   raw(): {} {
@@ -33,27 +44,26 @@ export class JObj extends JRaw {
   }
 }
 
-
 export class JValue extends JRaw {
   _v: any;
   _path: string[]
 
   string(): string {
-    if (_.isString(this._v)) {
+    if (isString(this._v)) {
       return this._v;
     }
     throw new Error(_errorMessage(this._v, this._path, 'string'))
   }
 
   stringOrNull(): ?string {
-    if (_.isString(this._v)) {
+    if (isString(this._v)) {
       return this._v;
     }
     return null;
   }
 
   toString(): string {
-    return _.toString(this._v)
+    return toString(this._v)
   }
 
   date(): Date {
@@ -76,27 +86,27 @@ export class JValue extends JRaw {
   }
 
   integer(): number {
-    if (_.isInteger(this._v)) {
-      return _.toInteger(this._v);
+    if (isInteger(this._v)) {
+      return this._v;
     }
 
     throw new Error(_errorMessage(this._v, this._path, 'interger'))
   }
 
   integerOrNull(): ?number {
-    if (_.isInteger(this._v)) {
-      return _.toInteger(this._v);
+    if (isInteger(this._v)) {
+      return this._v;
     }
 
     return null;
   }
 
   toInteger(): number {
-    return _.toInteger(this._v);
+    return toInteger(this._v);
   }
 
   number(): number {
-    if (_.isNumber(this._v)) {
+    if (isNumber(this._v)) {
       return this._v;
     }
 
@@ -104,7 +114,7 @@ export class JValue extends JRaw {
   }
 
   numberOrNull(): ?number {
-    if (_.isNumber(this._v)) {
+    if (isNumber(this._v)) {
       return this._v;
     }
 
@@ -112,11 +122,11 @@ export class JValue extends JRaw {
   }
 
   toNumber(): number {
-    return _.toNumber(this._v);
+    return toNumber(this._v);
   }
 
   bool(): boolean {
-    if (_.isBoolean(this._v)) {
+    if (isBoolean(this._v)) {
       return this._v;
     }
 
@@ -124,7 +134,7 @@ export class JValue extends JRaw {
   }
 
   boolOrNull(): ?boolean {
-    if (_.isBoolean(this._v)) {
+    if (isBoolean(this._v)) {
       return this._v;
     }
 
@@ -154,21 +164,21 @@ export class JValue extends JRaw {
   }
 
   object(): {} {
-    if (_.isObject(this._v)){
+    if (isObject(this._v)){
       return this._v;
     }
     throw new Error(_errorMessage(this._v, this._path, 'Object'))
   }
 
   objectOrNull(): ?{} {
-    if (_.isObject(this._v)){
+    if (isObject(this._v)){
       return this._v;
     }
     return null;
   }
 
   array(): [] {
-    if (_.isArray(this._v)) {
+    if (isArray(this._v)) {
       return this._v;
     }
 
@@ -176,7 +186,7 @@ export class JValue extends JRaw {
   }
 
   arrayOrNull(): ?[] {
-    if (_.isArray(this._v)) {
+    if (isArray(this._v)) {
       return this._v;
     }
 
@@ -189,9 +199,9 @@ export default function jj(jsonLike: any, path: string | string[] | null = null,
     return new JValue(jsonLike, parentPath)
   }
   if (typeof path == 'string') {
-    path = _.toPath(path);
+    path = toPath(path);
   }
-  const v = _.get(jsonLike, path)
+  const v = get(jsonLike, path)
 
   return new JValue(v, parentPath.concat(path));
 }
