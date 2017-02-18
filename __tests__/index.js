@@ -7,6 +7,7 @@ test('json utitity', () => {
     stringValue: 'yury',
     boolValue: true,
     boolFalseValue: false,
+    nullBool: null,
 
     nested: {
       integer: 1,
@@ -27,6 +28,9 @@ test('json utitity', () => {
 
   const boolFalseValue = jj(jsonObj, 'boolFalseValue').bool()
   expect(boolFalseValue).toEqual(false);
+
+  const nullBool = jj(jsonObj, 'boolBool').toBool()
+  expect(nullBool).toEqual(false);
 
   const nestedIntValue = jj(jsonObj, 'nested.integer').integer()
   expect(nestedIntValue).toEqual(1);
