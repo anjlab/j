@@ -131,7 +131,7 @@ export class JValue extends JRaw {
   }
 
   toBool(): boolean {
-    if (this._v === false || this._v === 0) {
+    if (this._v == null || this._v === false || this._v === 0 || this._v === 'false') {
       return false;
     }
 
