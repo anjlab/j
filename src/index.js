@@ -51,6 +51,10 @@ export class JValue extends JRaw {
     return null;
   }
 
+  stringOrDefault(defaultValue: string): string {
+    return this.stringOrNull() || defaultValue;
+  }
+
   toString(): string {
     return _.toString(this._v)
   }
@@ -74,6 +78,11 @@ export class JValue extends JRaw {
     return new Date(v);
   }
 
+  dateOrDefault(defaultValue: Date): Date {
+    return this.dateOrNull() || defaultValue;
+  }
+
+
   integer(): number {
     if (_.isInteger(this._v)) {
       return this._v;
@@ -88,6 +97,10 @@ export class JValue extends JRaw {
     }
 
     return null;
+  }
+
+  integerOrDefault(defaultValue: number): number {
+    return this.integerOrNull() || defaultValue;
   }
 
   toInteger(): number {
@@ -110,6 +123,10 @@ export class JValue extends JRaw {
     return null;
   }
 
+  numberOrDefault(defaultValue: number): number {
+    return this.numberOrNull() || defaultValue;
+  }
+
   toNumber(): number {
     return _.toNumber(this._v);
   }
@@ -128,6 +145,10 @@ export class JValue extends JRaw {
     }
 
     return null;
+  }
+
+  boolOrDefault(defaultValue: boolean): boolean {
+    return this.boolOrNull() || defaultValue;
   }
 
   toBool(): boolean {
@@ -152,6 +173,10 @@ export class JValue extends JRaw {
     return null;
   }
 
+  objOrDefault(defaultValue: JObj): JObj {
+    return this.objOrNull() || defaultValue;
+  }
+
   object(): {} {
     if (_.isObject(this._v)){
       return this._v;
@@ -164,6 +189,10 @@ export class JValue extends JRaw {
       return this._v;
     }
     return null;
+  }
+
+  objectOrDefault(defaultObject: Object): {} {
+    return this.objectOrNull() || defaultObject;
   }
 
   array(): [] {
@@ -180,6 +209,10 @@ export class JValue extends JRaw {
     }
 
     return null;
+  }
+
+  arrayOrDefault(defaultValue: []): [] {
+    return this.arrayOrNull() || defaultValue;
   }
 }
 
