@@ -58,10 +58,15 @@ test('json utitity', () => {
 });
 
 test('json default values', () => {
-  const jsonObject = {};
+  const jsonObject = {
+    emptyString: '',
+    zeroNumber: 0,
+    falseBool: false,
+  };
 
   const defaultString = jj(jsonObject, 'someKey1').stringOrDefault('value');
   expect(defaultString).toEqual('value');
+  expect(jj(jsonObject, 'emptyString').stringOrDefault('value')).toEqual('');
 
   const defaultValueOfDate = new Date();
   const defaultDate = jj(jsonObject, 'someKey2').dateOrDefault(defaultValueOfDate);
@@ -74,12 +79,15 @@ test('json default values', () => {
 
   const defaultInteger = jj(jsonObject, 'someKey3').integerOrDefault(999);
   expect(defaultInteger).toEqual(999);
+  expect(jj(jsonObject, 'zeroNumber').integerOrDefault(1)).toEqual(0);
 
   const defaultNumber = jj(jsonObject, 'someKey4').numberOrDefault(998);
   expect(defaultNumber).toEqual(998);
+  expect(jj(jsonObject, 'zeroNumber').numberOrDefault(1)).toEqual(0);
 
   const defaultBool = jj(jsonObject, 'someKey5').boolOrDefault(true);
   expect(defaultBool).toBe(true);
+  expect(jj(jsonObject, 'falseBool').boolOrDefault(true)).toBe(false);
 
   const defaultValueOfJObj = new JObj({}, ['somePath']);
   const defaultObj = jj(jsonObject, 'someKey6').objOrDefault(defaultValueOfJObj);

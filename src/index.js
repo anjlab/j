@@ -52,7 +52,8 @@ export class JValue extends JRaw {
   }
 
   stringOrDefault(defaultValue: string): string {
-    return this.stringOrNull() || defaultValue;
+    const value = this.stringOrNull();
+    return value == null ? defaultValue: value;
   }
 
   toString(): string {
@@ -100,7 +101,8 @@ export class JValue extends JRaw {
   }
 
   integerOrDefault(defaultValue: number): number {
-    return this.integerOrNull() || defaultValue;
+    const value = this.integerOrNull();
+    return value == null ? defaultValue: value;
   }
 
   toInteger(): number {
@@ -124,7 +126,8 @@ export class JValue extends JRaw {
   }
 
   numberOrDefault(defaultValue: number): number {
-    return this.numberOrNull() || defaultValue;
+    const value = this.numberOrNull();
+    return value == null ? defaultValue: value;
   }
 
   toNumber(): number {
@@ -148,7 +151,8 @@ export class JValue extends JRaw {
   }
 
   boolOrDefault(defaultValue: boolean): boolean {
-    return this.boolOrNull() || defaultValue;
+    const value = this.boolOrNull();
+    return value == null ? defaultValue: value;
   }
 
   toBool(): boolean {
