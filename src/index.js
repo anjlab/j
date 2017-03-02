@@ -199,7 +199,7 @@ export class JValue extends JRaw {
     return this.objectOrNull() || defaultObject;
   }
 
-  array(): [] {
+  array(): Array<*> {
     if (_.isArray(this._v)) {
       return this._v;
     }
@@ -207,7 +207,7 @@ export class JValue extends JRaw {
     throw new TypeError(_errorMessage(this._v, this._path, 'Array'))
   }
 
-  arrayOrNull(): ?[] {
+  arrayOrNull(): ?Array<*> {
     if (_.isArray(this._v)) {
       return this._v;
     }
@@ -215,7 +215,7 @@ export class JValue extends JRaw {
     return null;
   }
 
-  arrayOrDefault(defaultValue: []): [] {
+  arrayOrDefault(defaultValue: Array<*>): Array<*> {
     return this.arrayOrNull() || defaultValue;
   }
 }
