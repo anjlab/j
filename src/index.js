@@ -70,9 +70,8 @@ export class JValue extends JRaw {
   }
 
   dateOrNull(): ?Date {
-    const dateString = this.stringOrNull();
-    const v = Date.parse(dateString || '');
-    if (isNaN(v)) {
+    const v = this.timestampOrNull();
+    if (v == null) {
       return null;
     }
 
@@ -81,6 +80,34 @@ export class JValue extends JRaw {
 
   dateOrDefault(defaultValue: Date): Date {
     return this.dateOrNull() || defaultValue;
+  }
+
+  timestamp(): number {
+    const v = this.timestampOrNull();
+    if (v == null) {
+      throw new TypeError(_errorMessage(this._v, this._path, 'Date timestamp'))
+    }
+
+    return v;
+  }
+
+  timestampOrNull(): ?number {
+    const dateString = this.stringOrNull();
+    const v = Date.parse(dateString || '');
+    if (isNaN(v)) {
+      return null;
+    }
+
+    return v;
+  }
+
+  timestampOrDefault(defaultValue: number): number {
+    const v = this.timestampOrNull();
+    if (v == null) {
+      return defaultValue;
+    }
+
+    return v;
   }
 
 

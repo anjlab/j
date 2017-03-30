@@ -8,17 +8,23 @@ test('json utitity', () => {
     boolValue: true,
     boolFalseValue: false,
     nullBool: null,
+    createdAt: '2015-08-18T08:40:35.917Z',
 
     nested: {
       integer: 1,
       bool: 1,
       boolFalse: 0,
       array: [1, 2, 3],
-      createdAt: '2017-01-21T12:45:55.000Z'
+      createdAt: '2017-01-21T12:45:55.000Z',
     },
   }
 
   const stringValue = jj(jsonObj, 'stringValue').string()
+
+  expect(jj(jsonObj, 'createdAt').timestamp()).toEqual(1439887235917);
+  expect(jj(jsonObj, 'createdAt').timestampOrNull()).toEqual(1439887235917);
+  expect(jj(jsonObj, 'nullBull').timestampOrNull()).toEqual(null);
+  expect(jj(jsonObj, 'nested.createdAt').timestamp()).toEqual(1485002755000);
 
   expect(stringValue).toEqual('yury');
 
