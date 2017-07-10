@@ -2,15 +2,15 @@
 
 const _ = require('lodash');
 
-function _errorMessage(value: any, path:string[], type: string):string {
-  return `Cant't cast '${ value }' at ${ path.join('.') } to ${ type }`
+function _errorMessage(value: any, path: string[], type: string): string {
+  return `Cant't cast '${value}' at ${path.join('.')} to ${type}`;
 }
 
 export class JRaw {
   _v: any;
-  _path: string[]
+  _path: string[];
 
-  constructor(v: any, path:string[]) {
+  constructor(v: any, path: string[]) {
     this._v = v;
     this._path = path;
   }
@@ -25,23 +25,23 @@ export class JRaw {
 }
 
 export class JObj extends JRaw {
-  _v: {}
-  _path: string[]
+  _v: {};
+  _path: string[];
 
   get(path: string | string[] | null): JValue {
-    return jj(this._v, path, this._path)
+    return jj(this._v, path, this._path);
   }
 }
 
 export class JValue extends JRaw {
   _v: any;
-  _path: string[]
+  _path: string[];
 
   string(): string {
     if (_.isString(this._v)) {
       return this._v;
     }
-    throw new TypeError(_errorMessage(this._v, this._path, 'string'))
+    throw new TypeError(_errorMessage(this._v, this._path, 'string'));
   }
 
   stringOrNull(): ?string {
@@ -53,18 +53,18 @@ export class JValue extends JRaw {
 
   stringOrDefault(defaultValue: string): string {
     const value = this.stringOrNull();
-    return value == null ? defaultValue: value;
+    return value == null ? defaultValue : value;
   }
 
   toString(): string {
-    return _.toString(this._v)
+    return _.toString(this._v);
   }
 
   date(): Date {
-    const v = this.dateOrNull()
+    const v = this.dateOrNull();
 
     if (v == null) {
-      throw new TypeError(_errorMessage(this._v, this._path, 'Date'))
+      throw new TypeError(_errorMessage(this._v, this._path, 'Date'));
     }
     return v;
   }
@@ -85,7 +85,7 @@ export class JValue extends JRaw {
   timestamp(): number {
     const v = this.timestampOrNull();
     if (v == null) {
-      throw new TypeError(_errorMessage(this._v, this._path, 'Date timestamp'))
+      throw new TypeError(_errorMessage(this._v, this._path, 'Date timestamp'));
     }
 
     return v;
@@ -110,13 +110,12 @@ export class JValue extends JRaw {
     return v;
   }
 
-
   integer(): number {
     if (_.isInteger(this._v)) {
       return this._v;
     }
 
-    throw new TypeError(_errorMessage(this._v, this._path, 'interger'))
+    throw new TypeError(_errorMessage(this._v, this._path, 'interger'));
   }
 
   integerOrNull(): ?number {
@@ -129,7 +128,7 @@ export class JValue extends JRaw {
 
   integerOrDefault(defaultValue: number): number {
     const value = this.integerOrNull();
-    return value == null ? defaultValue: value;
+    return value == null ? defaultValue : value;
   }
 
   toInteger(): number {
@@ -141,7 +140,7 @@ export class JValue extends JRaw {
       return this._v;
     }
 
-    throw new TypeError(_errorMessage(this._v, this._path, 'number'))
+    throw new TypeError(_errorMessage(this._v, this._path, 'number'));
   }
 
   numberOrNull(): ?number {
@@ -154,7 +153,7 @@ export class JValue extends JRaw {
 
   numberOrDefault(defaultValue: number): number {
     const value = this.numberOrNull();
-    return value == null ? defaultValue: value;
+    return value == null ? defaultValue : value;
   }
 
   toNumber(): number {
@@ -166,7 +165,7 @@ export class JValue extends JRaw {
       return this._v;
     }
 
-    throw new TypeError(_errorMessage(this._v, this._path, 'boolean'))
+    throw new TypeError(_errorMessage(this._v, this._path, 'boolean'));
   }
 
   boolOrNull(): ?boolean {
@@ -179,11 +178,16 @@ export class JValue extends JRaw {
 
   boolOrDefault(defaultValue: boolean): boolean {
     const value = this.boolOrNull();
-    return value == null ? defaultValue: value;
+    return value == null ? defaultValue : value;
   }
 
   toBool(): boolean {
-    if (this._v == null || this._v === false || this._v === 0 || this._v === 'false') {
+    if (
+      this._v == null ||
+      this._v === false ||
+      this._v === 0 ||
+      this._v === 'false'
+    ) {
       return false;
     }
 
@@ -209,14 +213,14 @@ export class JValue extends JRaw {
   }
 
   object(): {} {
-    if (_.isObject(this._v)){
+    if (_.isObject(this._v)) {
       return this._v;
     }
-    throw new TypeError(_errorMessage(this._v, this._path, 'Object'))
+    throw new TypeError(_errorMessage(this._v, this._path, 'Object'));
   }
 
   objectOrNull(): ?{} {
-    if (_.isObject(this._v)){
+    if (_.isObject(this._v)) {
       return this._v;
     }
     return null;
@@ -231,7 +235,7 @@ export class JValue extends JRaw {
       return this._v;
     }
 
-    throw new TypeError(_errorMessage(this._v, this._path, 'Array'))
+    throw new TypeError(_errorMessage(this._v, this._path, 'Array'));
   }
 
   arrayOrNull(): ?Array<*> {
@@ -247,15 +251,18 @@ export class JValue extends JRaw {
   }
 }
 
-export default function jj(jsonLike: any, path: string | string[] | null = null, parentPath:string[] = ['<root>']): JValue {
+export default function jj(
+  jsonLike: any,
+  path: string | string[] | null = null,
+  parentPath: string[] = ['<root>'],
+): JValue {
   if (path == null) {
-    return new JValue(jsonLike, parentPath)
+    return new JValue(jsonLike, parentPath);
   }
   if (typeof path == 'string') {
     path = _.toPath(path);
   }
-  const v = _.get(jsonLike, path)
+  const v = _.get(jsonLike, path);
 
   return new JValue(v, parentPath.concat(path));
 }
-
